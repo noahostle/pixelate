@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Pixelation with Desired Size and Custom Colors</title>
+    <style>
+        canvas {
+            width: 400px;
+        }
+
+        #colorList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .colorSquare {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
+    <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
+    <input type="color" id="colorPicker">
+    <button id="addColorButton">Add</button>
+    <ul id="colorList"></ul>
+    <button id="compressButton">Compress!</button>
+    <br>
+    <canvas id="originalCanvas"></canvas>
+    <canvas id="compressedCanvas"></canvas>
+
+    <script>
+        const colors = [];
+        let img = new Image();
+        let originalCanvas = document.getElementById('originalCanvas');
+        let originalCtx = originalCanvas.getContext('2d');
+
+        document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+        document.getElementById('compressButton').addEventListener('click', pixelateImage);
+        document.getElementById('addColorButton').addEventListener('click', addColor);
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                img.onload = function() {
+                    originalCanvas.width = img.width;
+                    originalCanvas.height = img.height;
+                    originalCtx.drawImage(img, 0, 0);
+                };
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function clearWidth() {
+            document.getElementById('desiredWidth').value = '';
+        }
+
+        function clearHeight() {
+            document.getElementById('desiredHeight').value = '';
+        }
+
+        function addColor() {
+            const colorPicker = document.getElementById('colorPicker');
+            const color = colorPicker.value;
+            colors.push(color);
+            renderColorList();
+        }
+
+        function removeColor(index) {
+            colors.splice(index, 1);
+            renderColorList();
+        }
+
+        function renderColorList() {
+            const colorList = document.getElementById('colorList');
+            colorList.innerHTML = '';
+            colors.forEach((color, index) => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('colorSquare');
+                listItem.style.backgroundColor = color;
+                listItem.onclick = () => removeColor(index);
+                colorList.appendChild(listItem);
+            });
+        }
+
+        function pixelateImage() {
+            const desiredWidth = parseInt(document.getElementById('desiredWidth').value);
+            const desiredHeight = parseInt(document.getElementById('desiredHeight').value);
+
+            if (isNaN(desiredWidth) && isNaN(desiredHeight)) {
+                alert("Please enter a valid desired width or height greater than 0.");
+                return;
+            }
+
+            let scaleFactor;
+            if (!isNaN(desiredWidth)) {
+                scaleFactor = img.width / desiredWidth;
+            } else if (!isNaN(desiredHeight)) {
+                scaleFactor = img.height / desiredHeight;
+            }
+
+            const newWidth = Math.floor(img.width / scaleFactor);
+            const newHeight = Math.floor(img.height / scaleFactor);
+
+            const imageData = originalCtx.getImageData(0, 0, img.width, img.height);
+            const pixels = imageData.data;
+
+            const compressedCanvas = document.getElementById('compressedCanvas');
+            const compressedCtx = compressedCanvas.getContext('2d');
+            compressedCanvas.width = img.width;
+            compressedCanvas.height = img.height;
+
+            for (let y = 0; y < newHeight; y++) {
+                for (let x = 0; x < newWidth; x++) {
+                    let r = 0, g = 0, b = 0, a = 0;
+                    let count = 0;
+
+                    for (let ky = 0; ky < scaleFactor; ky++) {
+                        for (let kx = 0; kx < scaleFactor; kx++) {
+                            const originalX = Math.floor(x * scaleFactor + kx);
+                            const originalY = Math.floor(y * scaleFactor + ky);
+                            if (originalX < img.width && originalY < img.height) {
+                                const index = (originalY * img.width + originalX) * 4;
+                                r += pixels[index];
+                                g += pixels[index + 1];
+                                b += pixels[index + 2];
+                                a += pixels[index + 3];
+                                count++;
+                            }
+                        }
+                    }
+
+                    r = r / count;
+                    g = g / count;
+                    b = b / count;
+                    a = a / count;
+
+
+                    // Find the closest color
+                    if (colors.length==0){
+                        compressedCtx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
+                        compressedCtx.fillRect(x * scaleFactor, y * scaleFactor, Math.ceil(scaleFactor), Math.ceil(scaleFactor));
+                    } else {
+                        const closestColor = findClosestColor(r, g, b);
+                        // Draw the closest color
+                        compressedCtx.fillStyle = closestColor;
+                        compressedCtx.fillRect(x * scaleFactor, y * scaleFactor, Math.ceil(scaleFactor), Math.ceil(scaleFactor));
+                    }
+                }
+            }
+        }
+
+        function findClosestColor(r, g, b) {
+            let minDistance = Infinity;
+            let closestColor = '#FFFFFF'; // Default to white if no colors are selected
+
+            colors.forEach(color => {
+                const colorRgb = hexToRgb(color);
+                const distance = Math.sqrt(Math.pow(r - colorRgb.r, 2) + Math.pow(g - colorRgb.g, 2) + Math.pow(b - colorRgb.b, 2));
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestColor = color;
+                }
+            });
+
+            return closestColor;
+        }
+
+        function hexToRgb(hex) {
+            // Remove leading # and convert to base 16
+            hex = hex.replace(/^#/, '');
+            const bigint = parseInt(hex, 16);
+
+            // Extract RGB components
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+
+            return { r, g, b };
+        }
+    </script>
+</body>
+</html>
