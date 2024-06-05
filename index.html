@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image Pixelation with Desired Size and Custom Colors</title>
+    <title>Pixelate!</title>
     <style>
         canvas {
             width: 400px;
@@ -19,20 +19,109 @@
             margin: 5px;
             cursor: pointer;
         }
+        #modal * {
+            display:none;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #080414;
+            background-image:url("bkg.gif");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .title{
+            image-rendering: pixelated;
+            width:50%;
+
+            animation: MoveUpDown 8s ease-in-out infinite;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        @keyframes MoveUpDown {
+            0%, 100% {
+                bottom: 0;
+            }
+
+            50% {
+                bottom: 50px;
+          }
+        }
+
+        @keyframes cloud {
+            0%, 100% {
+                bottom: 55px;
+            }
+
+            50% {
+                bottom: 105px;
+          }
+        }
+
+
+
+        .upload-image{
+            image-rendering: pixelated;
+            width:20%;
+
+            animation: MoveUpDown 8s ease-in-out infinite;
+            animation-delay: 1000ms;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .upload-image:hover{
+            cursor:pointer;
+        }
+
+         .cloud{
+            pointer-events: none;
+            image-rendering: pixelated;
+            width:7%;
+
+            animation: cloud 8s ease-in-out infinite;
+            animation-delay: 1250ms;
+            position: absolute;
+            left: 5.5%;
+            bottom: 55px;
+        }
+
+        #menu{
+            width:100%;
+            height:100%;
+            position:absolute;
+            top:-15%;
+            left:27%;
+        
+
     </style>
 </head>
-<body>
-    <input type="file" id="imageInput" accept="image/*">
-    <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
-    <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
-    <input type="color" id="colorPicker">
-    <button id="addColorButton">Add</button>
-    <ul id="colorList"></ul>
-    <button id="compressButton">Compress!</button>
-    <br>
-    <canvas id="originalCanvas"></canvas>
-    <canvas id="compressedCanvas"></canvas>
+<body> 
+    <div id="menu">
+        <img src="title.png" class="title">
 
+        <input style="display:none" type="file" id="imageInput" accept="image/*">
+
+        <img src="upload.png" alt="Upload" onclick="document.getElementById('imageInput').click();" class="upload-image">
+
+        <img src="cloud.png" class="cloud">
+    </div>
+
+    <div id="modal">
+        <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
+        <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
+        <input type="color" id="colorPicker">
+        <button id="addColorButton">Add</button>
+        <ul id="colorList"></ul>
+        <button  id="compressButton">Compress!</button>
+
+        <canvas id="originalCanvas"></canvas>
+        <canvas  id="compressedCanvas"></canvas>
+    </div>
     <script>
         const colors = [];
         let img = new Image();
