@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <title>Pixelate!</title>
     <style>
         canvas {
@@ -8,7 +11,8 @@
         }
 
         .colorSquare {
-            display: inline-block;
+            position:static !important;
+            display: inline-block !important;
             width: 20px;
             height: 20px;
             margin: 5px;
@@ -35,7 +39,7 @@
             image-rendering: pixelated;
             width:50%;
 
-            animation: MoveUpDown 8s ease-in-out infinite;
+            animation: MoveUpDown 8s ease-in-out infinite !important;
             position: absolute;
             left: 0;
             bottom: 0;
@@ -67,6 +71,12 @@
         }
         .out{
             animation: transitionOut .25s ease-in-out forwards;
+        }
+        .outspec *{
+            animation: transitionOut .25s ease-in-out forwards;
+        }
+        .inspec *{
+            animation: transition .25s ease-in-out forwards;
         }
         .dark{
             animation: darkenanim .25s ease-in-out forwards;
@@ -230,7 +240,6 @@
             width: 100%;
             min-height: 26vw;
             background-color: red;
-            position:relative;
             left:100%;
         }
         #canvases{
@@ -254,6 +263,69 @@
 
         }
         #colorList {
+            background-color: grey;
+            height:75%;
+            width:90%;
+            left:5%;
+            top:6vw;
+            overflow-y:overlay;
+            scrollbar
+        }
+
+        #colorList::-webkit-scrollbar {
+            background: transparent;
+
+        }
+        #colorList::-webkit-scrollbar-thumb {
+            background: black;
+            border-radius:10px;
+
+        }
+
+        #colname {
+            left:270px;
+            top:0px;
+        }
+
+        #colprofile {
+            background-color:grey;
+            width: 28.85%;
+            height:26vw;
+            position:absolute;
+            left:34.5%;
+            overflow:hidden;
+            top:12vw;
+            animation:modal 14s ease-in-out infinite;
+            animation-delay: .25s;
+        }
+
+        #palette {
+            width:50%;
+            height:12vw;
+            left:25%;
+            top:30%;
+            background-color:red;
+            position:absolute;
+        }
+
+        #rename{
+            background-color: transparent;
+            border:none;
+            cursor: text;
+            outline:none;
+            color:white;
+            width:90%;
+            max-lines: 2;
+            font-size:32px;
+            resize:none;
+            font-family: "Pixelify Sans";
+        }
+
+        #del {
+
+        }
+
+        #edit {
 
         }
         /*colorPicker
@@ -262,6 +334,7 @@ colorList*/
         
 
     </style>
+
 </head>
 <body> 
 
@@ -286,8 +359,9 @@ colorList*/
             <div id="colsdiv">
                 <h1>colors</h1>
                 <input type="color" id="colorPicker">
+                <input type="text" id="colname" placeholder="name">
                 <button id="addColorButton">Add</button>
-                <button id="save" onclick="save()">save</button>
+                <button id="coltoggle" onclick="togglecols()">Use cols</button>
                 <div id="colorList"></div>
             </div>      
 
@@ -302,12 +376,31 @@ colorList*/
         <button id="compressButton">Compress!</button>
 
     </div>
+
+
+
+    <div id="colprofile" style="display:none;">
+        <textarea maxlength="28" id="rename" type="text" placeholder="PLACEHOLDER"></textarea>
+
+        <button id="del">delete</button>
+        <input id="edit" class="palette" type="color">
+    </div> 
     <script>
 
         let colors = JSON.parse(localStorage.getItem('saves'));
+        if (null==colors){
+            colors=[];
+        }
+        let names = JSON.parse(localStorage.getItem('names'));
+        if (null==names){
+            names=[];
+        }
+
         let img = new Image();
         let originalCanvas = document.getElementById('originalCanvas');
         let originalCtx = originalCanvas.getContext('2d');
+        let compressedCtx;
+        let compressedCanvas;
         let modal = document.getElementById("modal");
         let menu = document.getElementById("menu");
         let darken = document.getElementById("darken");
@@ -315,6 +408,21 @@ colorList*/
         let colsmenu = document.getElementById("colsdiv");
         let canvy = document.getElementById("canvases");
         let colbtn = document.getElementById("colsmenu");
+
+        let profile = document.getElementById("colprofile");
+
+
+        let file;
+        let reader;
+
+        renderColorList();
+
+
+
+
+
+        openModal();
+        opencolormenu();
 
 
         document.getElementById('imageInput').addEventListener('change', handleImageUpload);
@@ -324,7 +432,7 @@ colorList*/
 
         function save(){
             localStorage.setItem('saves',JSON.stringify(colors));
-
+            localStorage.setItem('names', JSON.stringify(names));
         }
 
 
@@ -345,6 +453,8 @@ colorList*/
             reader.readAsDataURL(file);
 
             openModal();
+
+            event.target.value="";
             
         }
 
@@ -364,7 +474,7 @@ colorList*/
 
         function closecolormenu(){
             colbtn.textContent="+";
-                        setTimeout(function(){
+            setTimeout(function(){
                 colbtn.onclick=function(){opencolormenu();}
             }, 500);
             colsmenu.classList.remove("leftc");
@@ -375,14 +485,14 @@ colorList*/
 
         function openModal(){
             console.log("open");
-            menu.classList.remove("in");
-            menu.classList.add("out");
+            menu.classList.remove("inspec");
+            menu.classList.add("outspec");
             setTimeout(function(){
                 menu.style.display="none";
             }, 250);
 
-            modal.classList.remove("out");
-            modal.classList.add("in");
+            modal.classList.remove("outspec");
+            modal.classList.add("inspec");
 
             modal.style.display="block";
             darken.style.display="block";
@@ -393,13 +503,16 @@ colorList*/
 
         function closemodal(){
 
+            closecolorprofile();
+            closecolormenu();
+
             console.log("close");
             menu.style.display="block";
-            menu.classList.remove("out");
-            menu.classList.add("in");
+            menu.classList.remove("outspec");
+            menu.classList.add("inspec");
 
-            modal.classList.remove("in");
-            modal.classList.add("out");
+            modal.classList.remove("inspec");
+            modal.classList.add("outspec");
 
             darken.classList.remove("dark");
             darken.classList.add("light");
@@ -407,6 +520,10 @@ colorList*/
                 modal.style.display="none";
                 darken.style.display="none";
             }, 250);
+
+            compressedCtx.clearRect(0, 0, compressedCanvas.width, compressedCanvas.height);
+            originalCtx.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
+            compressedCanvas.style.display="none";
         }
 
         function clearWidth() {
@@ -419,14 +536,22 @@ colorList*/
 
         function addColor() {
             const colorPicker = document.getElementById('colorPicker');
-            const color = colorPicker.value;
+            let color = colorPicker.value;
             colors.push(color);
+
+            const nametext = document.getElementById("colname");
+            let name = nametext.value;
+            names.push(name);
+            nametext.value="";
+
             renderColorList();
             save();
         }
 
         function removeColor(index) {
             colors.splice(index, 1);
+            names.splice(index, 1);
+
             renderColorList();
             save();
         }
@@ -435,15 +560,78 @@ colorList*/
             const colorList = document.getElementById('colorList');
             colorList.innerHTML = '';
             colors.forEach((color, index) => {
-                const listItem = document.createElement('li');
+                let listItem = document.createElement('button');
                 listItem.classList.add('colorSquare');
                 listItem.style.backgroundColor = color;
-                listItem.onclick = () => removeColor(index);
+                listItem.onclick = () => opencol(index);
                 colorList.appendChild(listItem);
             });
         }
 
+        function opencol(index){
+
+            let rename = document.getElementById("rename");
+            //let palette = document.getElementById("palette");
+            let del = document.getElementById("del");
+            let edit = document.getElementById("edit");
+
+            rename.value=names[index];
+
+            rename.onchange=function(){names[index]=rename.value};
+            edit.value=colors[index];
+            //edit.style.backgroundColor=colors[index];
+            del.onclick=function(){removeColor(index);closecolorprofile();};
+            edit.onchange=function(){colors[index]=edit.value;};
+
+
+
+
+
+
+            opencolorprofile();
+
+
+            //onchange="rename()"
+            //delete
+            //edit col
+        }
+
+
+        function opencolorprofile(){
+            profile.style.display="block";
+            colsmenu.classList.remove("leftc");
+            colsmenu.style.transform="transformX('-100%')";
+            colsmenu.classList.remove("inspec");
+            colsmenu.classList.add("outspec");
+
+            colbtn.onclick=function(){closecolorprofile();}
+
+            profile.classList.remove("outspec");
+            profile.classList.add("inspec");
+
+        }
+
+        function closecolorprofile(){
+            colbtn.onclick=function(){closecolormenu();}
+            setTimeout(function(){
+                profile.style.display="none";
+            }, 250);
+            profile.classList.remove("inspec");
+            profile.classList.add("outspec");
+
+
+            colsmenu.classList.remove("outspec");
+            colsmenu.classList.add("leftc");
+            save();
+            renderColorList();
+        }
+
         function pixelateImage() {
+
+            closecolormenu();
+            closecolorprofile();
+
+
             const desiredWidth = parseInt(document.getElementById('desiredWidth').value);
             const desiredHeight = parseInt(document.getElementById('desiredHeight').value);
 
@@ -465,8 +653,8 @@ colorList*/
             const imageData = originalCtx.getImageData(0, 0, img.width, img.height);
             const pixels = imageData.data;
 
-            const compressedCanvas = document.getElementById('compressedCanvas');
-            const compressedCtx = compressedCanvas.getContext('2d');
+            compressedCanvas = document.getElementById('compressedCanvas');
+            compressedCtx = compressedCanvas.getContext('2d');
             compressedCanvas.width = img.width;
             compressedCanvas.height = img.height;
 
@@ -495,7 +683,6 @@ colorList*/
                     b = b / count;
                     a = a / count;
 
-
                     // Find the closest color
                     if (colors.length==0){
                         compressedCtx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
@@ -508,6 +695,19 @@ colorList*/
                     }
                 }
             }
+
+        compressedCanvas.style.display="initial";
+        instructionsInit();
+
+        }
+
+        function instructionsInit(){
+            compressedCanvas;
+            //darken and turn pointer then show onclick n stuff
+        }
+
+        function stopInstructions(){
+            
         }
 
         function findClosestColor(r, g, b) {
