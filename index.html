@@ -7,11 +7,6 @@
             width: 400px;
         }
 
-        #colorList {
-            list-style: none;
-            padding: 0;
-        }
-
         .colorSquare {
             display: inline-block;
             width: 20px;
@@ -20,15 +15,20 @@
             cursor: pointer;
         }
         #modal * {
-            display:none;
+            position:absolute;
+            z-index: 2;
+
+        }
+        #modal {
+             animation: modal 14s ease-in-out infinite;
         }
 
         body {
+            width:100%;
             overflow: hidden;
             background-color: #080414;
-            background-image:url("bkg.gif");
-            background-repeat: no-repeat;
-            background-size: 100%;
+            background-image: url("bkg.gif");
+            background-size: cover;
         }
 
         .title{
@@ -43,24 +43,77 @@
 
         @keyframes MoveUpDown {
             0%, 100% {
-                bottom: 0;
+                transform: TranslateY(0);
             }
 
             50% {
-                bottom: 50px;
+                transform: TranslateY(-50px);
           }
         }
 
-        @keyframes cloud {
+        @keyframes modal {
             0%, 100% {
-                bottom: 55px;
+                transform: TranslateY(0);
             }
 
             50% {
-                bottom: 105px;
+                transform: TranslateY(-25px);
           }
         }
 
+
+        .in{
+            animation: transition .25s ease-in-out forwards;
+        }
+        .out{
+            animation: transitionOut .25s ease-in-out forwards;
+        }
+        .dark{
+            animation: darkenanim .25s ease-in-out forwards;
+        }
+        .light{
+           animation: lighten .25s ease-in-out forwards; 
+        }
+
+        @keyframes darkenanim {
+            0% {opacity: 0%;}
+            100% {opacity:60%}
+        }
+        @keyframes lighten {
+            0% {opacity: 60%}
+            100% {opacity:0%;}
+        }
+        @keyframes transition {
+            0% {opacity: 0%;}
+            100% {opacity:100%}
+        }
+        @keyframes transitionOut {
+            0% {opacity: 100%}
+            100% {opacity:0%;}
+        }
+
+
+
+
+        .leftc{
+           animation: leftt .5s ease-in-out forwards !important; 
+        }
+
+
+        @keyframes leftt {
+            0% {transform: TranslateX(0%);}
+            100% {transform: TranslateX(-100%);}
+        }
+
+        .rightc{
+           animation: rightt .5s ease-in-out forwards !important; 
+        }
+
+
+        @keyframes rightt {
+            0% {transform: TranslateX(-100%);}
+            100% {transform: TranslateX(0%);}
+        }
 
 
         .upload-image{
@@ -83,7 +136,7 @@
             image-rendering: pixelated;
             width:7%;
 
-            animation: cloud 8s ease-in-out infinite;
+            animation: MoveUpDown 8s ease-in-out infinite;
             animation-delay: 1250ms;
             position: absolute;
             left: 5.5%;
@@ -96,11 +149,123 @@
             position:absolute;
             top:-15%;
             left:27%;
+        }
+
+        .modalbkg{
+            width:70%;
+            position:absolute;
+            left:15%;
+            z-index:1 !important;
+        }
+
+        .holder {
+            width: 28.85%;
+            height:26vw;
+            position:absolute;
+            left:34%;
+            overflow:hidden;
+            top:12vw;
+        }
+        .holder * {
+            display:inline-block;
+        }
+
+        .canvas {
+            object-fit: contain;
+            object-position: 50% 50%;
+              max-width:100%;
+              max-height:100%;
+              display:block;
+              position:absolute;
+              left:0;
+              right:0;
+              bottom:0;
+              top:0;
+              margin:auto;
+              /*i have no idea how this works, i hate css so much*/
+            animation:none !important;
+
+        }
+
+        #darken{
+            opacity:0;
+            width:100%;
+            min-height:100vh;
+            background-color: black;
+            z-index:-1;
+            position:absolute;
+        }
+
+        #darken:hover{
+            cursor:pointer;
+        }
+
+        .scaleinp{
+            position:absolute;
+            left:34%;
+            top:42.5vw;
+            animation:modal 14s ease-in-out infinite; !important;
+        }
+        .scaleinp *{
+            width:100px;
+        }
+
+        .color{
+            animation:modal 14s ease-in-out infinite; !important;
+            position:absolute;
+            width:5%;
+            left:47.5%;
+            top:42.5vw;
+        }
+
+        #compressButton{
+            width:100px;
+            animation:modal 14s ease-in-out infinite; !important;
+            position:absolute;
+            left:54%;
+            top:42.5vw;
+        }
+
+        #colsdiv{
+            width: 100%;
+            min-height: 26vw;
+            background-color: red;
+            position:relative;
+            left:100%;
+        }
+        #canvases{
+            width:100%;
+            height:100%;
+        }
+
+        #addColorButton{
+            left:200px;
+        }
+
+        #colorPicker{
+            left:100px;
+        }
+
+        #saves {
+            top:100px;
+            background-color: grey;
+            width:100px;
+            min-height:50px;
+
+        }
+        #colorList {
+
+        }
+        /*colorPicker
+addColorButton
+colorList*/
         
 
     </style>
 </head>
 <body> 
+
+    <div id="darken" style="display:none;" onclick="closemodal()"></div>
     <div id="menu">
         <img src="title.png" class="title">
 
@@ -111,30 +276,62 @@
         <img src="cloud.png" class="cloud">
     </div>
 
-    <div id="modal">
-        <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
-        <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
-        <input type="color" id="colorPicker">
-        <button id="addColorButton">Add</button>
-        <ul id="colorList"></ul>
-        <button  id="compressButton">Compress!</button>
+    <div id="modal" style="display:none;">
+        <img src="modal.png" class="modalbkg">
+        <div class="holder">
+            <div id="canvases">
+                <canvas id="originalCanvas" class="canvas"></canvas>
+                <canvas  id="compressedCanvas" class="canvas"></canvas>
+            </div>
+            <div id="colsdiv">
+                <h1>colors</h1>
+                <input type="color" id="colorPicker">
+                <button id="addColorButton">Add</button>
+                <button id="save" onclick="save()">save</button>
+                <div id="colorList"></div>
+            </div>      
 
-        <canvas id="originalCanvas"></canvas>
-        <canvas  id="compressedCanvas"></canvas>
+            </div>
+        <div  class="scaleinp">
+            <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
+            <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
+        </div>
+        <div class="color">
+            <button id="colsmenu" onclick="opencolormenu()">+</button>
+        </div>
+        <button id="compressButton">Compress!</button>
+
     </div>
     <script>
-        const colors = [];
+
+        let colors = JSON.parse(localStorage.getItem('saves'));
         let img = new Image();
         let originalCanvas = document.getElementById('originalCanvas');
         let originalCtx = originalCanvas.getContext('2d');
+        let modal = document.getElementById("modal");
+        let menu = document.getElementById("menu");
+        let darken = document.getElementById("darken");
+
+        let colsmenu = document.getElementById("colsdiv");
+        let canvy = document.getElementById("canvases");
+        let colbtn = document.getElementById("colsmenu");
+
 
         document.getElementById('imageInput').addEventListener('change', handleImageUpload);
         document.getElementById('compressButton').addEventListener('click', pixelateImage);
         document.getElementById('addColorButton').addEventListener('click', addColor);
 
+
+        function save(){
+            localStorage.setItem('saves',JSON.stringify(colors));
+
+        }
+
+
         function handleImageUpload(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+            console.log("handlwe");
+            file = event.target.files[0];
+            reader = new FileReader();
 
             reader.onload = function(e) {
                 img.onload = function() {
@@ -146,6 +343,70 @@
             };
 
             reader.readAsDataURL(file);
+
+            openModal();
+            
+        }
+
+        function opencolormenu(){
+            console.log("opencols");
+            colbtn.textContent="<";
+            setTimeout(function(){
+                colbtn.onclick=function(){closecolormenu();}
+            }, 500);
+
+            colsmenu.classList.remove("rightc");
+            canvy.classList.remove("rightc");
+            colsmenu.classList.add("leftc");
+            canvy.classList.add("leftc");
+        }
+
+
+        function closecolormenu(){
+            colbtn.textContent="+";
+                        setTimeout(function(){
+                colbtn.onclick=function(){opencolormenu();}
+            }, 500);
+            colsmenu.classList.remove("leftc");
+            canvy.classList.remove("leftc");
+            colsmenu.classList.add("rightc");
+            canvy.classList.add("rightc");
+        }
+
+        function openModal(){
+            console.log("open");
+            menu.classList.remove("in");
+            menu.classList.add("out");
+            setTimeout(function(){
+                menu.style.display="none";
+            }, 250);
+
+            modal.classList.remove("out");
+            modal.classList.add("in");
+
+            modal.style.display="block";
+            darken.style.display="block";
+
+            darken.classList.remove("light");
+            darken.classList.add("dark");
+        }
+
+        function closemodal(){
+
+            console.log("close");
+            menu.style.display="block";
+            menu.classList.remove("out");
+            menu.classList.add("in");
+
+            modal.classList.remove("in");
+            modal.classList.add("out");
+
+            darken.classList.remove("dark");
+            darken.classList.add("light");
+            setTimeout(function(){
+                modal.style.display="none";
+                darken.style.display="none";
+            }, 250);
         }
 
         function clearWidth() {
@@ -161,11 +422,13 @@
             const color = colorPicker.value;
             colors.push(color);
             renderColorList();
+            save();
         }
 
         function removeColor(index) {
             colors.splice(index, 1);
             renderColorList();
+            save();
         }
 
         function renderColorList() {
