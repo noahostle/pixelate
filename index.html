@@ -13,10 +13,12 @@
         .colorSquare {
             position:static !important;
             display: inline-block !important;
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             margin: 5px;
             cursor: pointer;
+            border:white 1.5px solid;
+            border-radius:25px;
         }
         #modal * {
             position:absolute;
@@ -239,7 +241,6 @@
         #colsdiv{
             width: 100%;
             min-height: 26vw;
-            background-color: red;
             left:100%;
         }
         #canvases{
@@ -263,21 +264,22 @@
 
         }
         #colorList {
-            background-color: grey;
-            height:75%;
+            height:60%;
             width:90%;
-            left:5%;
-            top:6vw;
+            left:7%;
+            top:8.5vw;
             overflow-y:overlay;
-            scrollbar
+            
         }
 
         #colorList::-webkit-scrollbar {
             background: transparent;
+            width:10px;
 
         }
         #colorList::-webkit-scrollbar-thumb {
-            background: black;
+            width:5px;
+            background: white;
             border-radius:10px;
 
         }
@@ -288,7 +290,6 @@
         }
 
         #colprofile {
-            background-color:grey;
             width: 28.85%;
             height:26vw;
             position:absolute;
@@ -322,15 +323,285 @@
         }
 
         #del {
+            position: absolute;
+            width:10%;
+            left:82.5%;
+            top:80%;
+            cursor:pointer;
 
         }
 
         #edit {
+            width:50%;
+            top:30%;
+            position:absolute;
+            left:25%;
+            height:14vw;
+           cursor: pointer;
+        }
+
+        /*toggle*/
+                        .switch {
+                            position: relative;
+                            display: inline-block;
+                            width: 40px;
+                            height: 20px;
+                        }
+
+                        
+                        .switch input {
+                            opacity: 0;
+                            width: 0;
+                            height: 0;
+                        }
+
+                    
+                        .slider {
+                            cursor: pointer;
+                            position: absolute;
+                            inset: 0;
+                            background-color: #eee;
+                            transition: 0.25s ease-in-out;
+                            border-radius: 10px;
+                            box-shadow: 0 3px #757575;
+                        }
+
+                        .slider:before {
+                            position: absolute;
+                            content: "";
+                            height: 17.5px;
+                            width: 17.5px;
+                            border-radius: 12.75px;
+                            left: 2px;
+                            bottom: 3.5px;
+                            background-color: #ff4255;
+                            transition: 0.25s ease-in-out;
+                            box-shadow: 0 3px #757575;
+                        }
+
+                        .slider:hover::before {
+                            box-shadow: 0 5px #757575;
+                            bottom: 6.5px;
+                        }
+
+                        input:checked+.slider:before {
+                            transform: translateX(19px);
+                            background: #34eb3d;
+                        }
+                        input:checked+.slider{
+                             background-color: #c9c9c9;
+                        }
+
+        #toggle {
+            top:20px;
+            width:100px;
+            left:10px;
+        }
+
+        .toggletitle {
+            top:-35px;
+            font-size:15px;
+            color:white;
+            font-family: "Pixelify Sans";
+        }
+
+        #colorPicker {
+            visibility:hidden;
+            pointer-events: none;
+        }
+
+        .addpicker{
+            width:10%;
+            left:37%;
+            top:-10px;
+        }
+
+        .addcol{
+            position:absolute;
+            background:transparent;
+            border:none;
+            cursor:pointer;
+            width:100%;
+            left:50%;
+            font-size:50px;
+            font-family: "Pixelify Sans";
+            color:white;
+            font-weight:bold;
+            top:0px;
+
+            text-shadow:0 4px #595959;
+            transition: all 0.4s;
+        }
+
+        .addcol:hover{
+            text-shadow:0 5.5px #595959;
+            top:-3.5px;
+        }
+        
+
+        #colname {
+            font-size:28px;
+            background:transparent;
+            border:none;
+            cursor:text;
+            position:absolute;
+            width:27%;
+            height:3vw;
+            left:63%;
+            outline:none;
+            color:white;
+            font-family: "Pixelify Sans";
 
         }
-        /*colorPicker
-addColorButton
-colorList*/
+
+        ::placeholder{
+            color:#d6d6d6;
+        }
+
+        .colstitle{
+             color:white;
+            font-family: "Pixelify Sans";
+            font-size:32px;
+            top:12%;
+        }
+
+        .scaleinp{
+            width:100px;
+            left:35%;
+        }
+
+        .scaleinp *{
+            text-align: center;
+            border:none;
+            border-radius: 5px;
+            height:20px;
+            outline:none;
+            font-weight: bold;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+        }
+
+        #desiredHeight{
+            width:70%;
+            right:0;
+            background-color:#e6e6e6;
+            color:#8f63ff;
+
+        }
+
+        #desiredHeight::placeholder{
+            color:#8f63ff;
+        }
+        #desiredWidth::placeholder{
+            color:#8f63ff;
+        }
+
+        #desiredWidth{
+            width:20%;
+            left:0;
+            background-color:#8f63ff;
+            color:#e6e6e6;
+            border-radius:25px;
+        }
+        
+        .grow{
+            animation: gro .8s cubic-bezier(.88,0,0,1) forwards;
+        }
+        .shrink{
+            animation: shrin .8s cubic-bezier(.88,0,0,1) forwards;
+
+        }
+
+
+        @keyframes gro{
+            0%{width:20%;
+                background-color:#8f63ff;
+                color:#e6e6e6;
+                border-radius:25px;
+            }
+            100%{width:70%;
+                background-color:#e6e6e6;
+                color:#8f63ff;
+                border-radius:5px;
+            }
+        }
+        @keyframes shrin{
+            0%{width:70%;
+                background-color:#e6e6e6;
+            color:#8f63ff;
+            border-radius:5px;}
+            100%{width:20%;
+            background-color:#8f63ff;
+        color:#e6e6e6;
+    border-radius:25px;}
+        }
+
+
+
+        @keyframes spinanim{
+            0%{transform: rotate(0);}
+            100%{transform: rotate(180deg);}
+        }
+
+        @keyframes unspinanim{
+            0%{transform: rotate(180deg);}
+            100%{transform: rotate(360deg);}
+        }
+
+        .spin{
+            animation: spinanim .8s cubic-bezier(.88,0,0,1) forwards;
+        }
+
+        .unspin{
+            animation: unspinanim .8s cubic-bezier(.88,0,0,1) forwards;
+        }
+
+        #colsmenu {
+            background:transparent;
+            font-family: "Pixelify Sans";
+            font-size:32px;
+            font-weight: bold;
+            color:#8f63ff;
+            border:none;
+            top:-10px;
+            cursor:pointer;
+            left:10%;
+
+            transition: all 0.4s;
+        }
+
+        #colsmenu:hover{
+            top:-13.5px;
+        }
+
+        #compressButton{
+            background:transparent;
+            font-family: "Pixelify Sans";
+            font-size:42px;
+            font-weight: bolder;
+            color:#8f63ff;
+            border:none;
+            cursor:pointer;
+            top:41vw;
+            left:55%;
+
+            transition: all 0.4s;
+        }
+
+        #compressButton:hover{
+           top:40vw;
+        }
+
+
+        input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
         
 
     </style>
@@ -357,23 +628,33 @@ colorList*/
                 <canvas  id="compressedCanvas" class="canvas"></canvas>
             </div>
             <div id="colsdiv">
-                <h1>colors</h1>
-                <input type="color" id="colorPicker">
-                <input type="text" id="colname" placeholder="name">
-                <button id="addColorButton">Add</button>
-                <button id="coltoggle" onclick="togglecols()">Use cols</button>
+                <h1 class="colstitle">Palette</h1>
+                <div class="addpicker">
+                    <button class="addcol" onclick="rpicker()">+</button>
+                    <input style="" type="color" id="colorPicker">
+                </div>
+                <input type="text" id="colname" maxlength="28"  placeholder="name...">
+                
+                <div id="toggle">
+                <p class="toggletitle">Use palette?</p>
+                <label class="switch">
+                  <input type="checkbox" id="togal" onclick="togglecols()">
+                  <span class="slider"></span>
+                </label>
+                </div>
+
                 <div id="colorList"></div>
             </div>      
 
             </div>
         <div  class="scaleinp">
-            <input type="number" id="desiredWidth" placeholder="Desired Width" min="1" oninput="clearHeight()">
-            <input type="number" id="desiredHeight" placeholder="Desired Height" min="1" oninput="clearWidth()">
+            <input type="text"  onclick="htw()" oninput="this.value = this.value.replace(/[^\d.-]+/g, '');" id="desiredWidth" placeholder="Width" min="1" oninput="clearHeight()">
+            <input type="text" id="desiredHeight" oninput="this.value = this.value.replace(/[^\d.-]+/g, '');" placeholder="Height" min="1" oninput="clearWidth()">
         </div>
         <div class="color">
-            <button id="colsmenu" onclick="opencolormenu()">+</button>
+            <button id="colsmenu" onclick="opencolormenu()">></button>
         </div>
-        <button id="compressButton">Compress!</button>
+        <button id="compressButton">Go!</button>
 
     </div>
 
@@ -382,7 +663,7 @@ colorList*/
     <div id="colprofile" style="display:none;">
         <textarea maxlength="28" id="rename" type="text" placeholder="PLACEHOLDER"></textarea>
 
-        <button id="del">delete</button>
+        <img src="delete.png" id="del" onclick="delete()">
         <input id="edit" class="palette" type="color">
     </div> 
     <script>
@@ -411,6 +692,18 @@ colorList*/
 
         let profile = document.getElementById("colprofile");
 
+        let picker = document.getElementById("colorPicker");
+
+        const nametext = document.getElementById("colname");
+
+        let usecols=false;
+        let paltoggle = document.getElementById("togal");
+
+        let wid = document.getElementById("desiredWidth");
+        let hei = document.getElementById("desiredHeight");
+        wid.value="W";
+
+
 
         let file;
         let reader;
@@ -421,18 +714,71 @@ colorList*/
 
 
 
-        openModal();
-        opencolormenu();
-
 
         document.getElementById('imageInput').addEventListener('change', handleImageUpload);
         document.getElementById('compressButton').addEventListener('click', pixelateImage);
         document.getElementById('addColorButton').addEventListener('click', addColor);
 
 
+
+
+
+        function wth(){
+            wid.classList.remove("grow");
+            wid.classList.add("shrink");
+            wid.placeholder=wid.value;
+            wid.value="";
+            setTimeout(function(){
+                wid.value="W";
+                wid.placeholder="Width";
+            }, 800);
+
+            hei.classList.remove("shrink");
+            hei.classList.add("grow");
+            hei.value="";
+
+            wid.onclick=function(){htw();};
+
+        }
+        function htw(){
+            hei.classList.remove("grow");
+            hei.classList.add("shrink");
+            hei.placeholder=hei.value;
+            hei.value="";
+            setTimeout(function(){
+                hei.value="H";
+                hei.placeholder="Height";
+            }, 800);
+
+            wid.classList.remove("shrink");
+            wid.classList.add("grow");
+            wid.value="";
+
+            hei.onclick=function(){wth();};
+        }
+
+        function togglecols(){
+            usecols=paltoggle.checked;
+            //usecols=!usecols
+        }
+
+
         function save(){
             localStorage.setItem('saves',JSON.stringify(colors));
             localStorage.setItem('names', JSON.stringify(names));
+        }
+
+        function rpicker(){
+            picker.click();
+            addColor();
+            picker.onchange=function(){colors[colors.length-1]=picker.value;
+                console.log(colors)
+                console.log(picker.value)
+                renderColorList();
+                save();
+                nametext.value="";
+            }
+
         }
 
 
@@ -458,9 +804,13 @@ colorList*/
             
         }
 
+
+
+
         function opencolormenu(){
             console.log("opencols");
-            colbtn.textContent="<";
+            colbtn.classList.remove("unspin");
+            colbtn.classList.add("spin");
             setTimeout(function(){
                 colbtn.onclick=function(){closecolormenu();}
             }, 500);
@@ -473,7 +823,8 @@ colorList*/
 
 
         function closecolormenu(){
-            colbtn.textContent="+";
+            colbtn.classList.remove("spin");
+            colbtn.classList.add("unspin");
             setTimeout(function(){
                 colbtn.onclick=function(){opencolormenu();}
             }, 500);
@@ -539,10 +890,9 @@ colorList*/
             let color = colorPicker.value;
             colors.push(color);
 
-            const nametext = document.getElementById("colname");
             let name = nametext.value;
             names.push(name);
-            nametext.value="";
+            
 
             renderColorList();
             save();
@@ -600,7 +950,6 @@ colorList*/
         function opencolorprofile(){
             profile.style.display="block";
             colsmenu.classList.remove("leftc");
-            colsmenu.style.transform="transformX('-100%')";
             colsmenu.classList.remove("inspec");
             colsmenu.classList.add("outspec");
 
@@ -684,7 +1033,7 @@ colorList*/
                     a = a / count;
 
                     // Find the closest color
-                    if (colors.length==0){
+                    if (colors.length==0 | usecols==false){
                         compressedCtx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
                         compressedCtx.fillRect(x * scaleFactor, y * scaleFactor, Math.ceil(scaleFactor), Math.ceil(scaleFactor));
                     } else {
