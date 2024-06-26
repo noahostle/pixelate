@@ -7,7 +7,12 @@
     <title>Pixelate!</title>
     <style>
         canvas {
-            width: 400px;
+            width: 100%;
+            image-rendering: pixelated;
+        }
+
+        #originalCanvas{
+            cursor:default !important;
         }
 
         .colorSquare {
@@ -30,6 +35,7 @@
         }
 
         body {
+            margin:0;
             width:100%;
             overflow: hidden;
             background-color: #080414;
@@ -598,6 +604,573 @@
            top:40vw;
         }
 
+        #compressedCanvas{
+            transition:.4s;
+            width:100%;
+            left:0;
+
+            filter:brightness(100%);
+        }
+        #compressedCanvas:hover{
+            filter:brightness(30%);
+            cursor:pointer;
+        }
+
+        .instrbkg{
+            position:absolute;
+            z-index:1000;
+            width:100%;
+            min-height: 100vh;
+            overflow: hidden;
+            background-image: url("astronomy.png");
+            background-size: cover;
+            background-position:center bottom;
+            padding:0;
+            top:-100%;
+        }
+
+        .comefromtop{
+            animation: comedown 1s cubic-bezier(1,0,0,1) forwards;
+        }
+
+        @keyframes comedown{
+            0%{
+                top:-100%;
+            }
+            100%{
+                top:0;
+            }
+        }
+
+        .instrholder{
+            position:absolute;
+            min-height:80vh;
+            width:40%;
+            left:30%;
+            top:9vh !important;
+            background-color:rgba(255,255,255,.9);
+            
+            /*border-radius:5%;*/
+        }
+
+
+        #instrCanvas {
+            position:absolute;
+            width:45%;
+
+            margin-top:auto;
+            margin-bottom:auto;
+            top:0;
+            bottom:0;
+
+            right:20px;
+        }
+
+        #instrsqr{
+            width:100px;
+            min-height:100px;
+            top:80%;
+            left:16%;
+            position:absolute;
+
+            transform:translateY(-250%);
+        }
+        .instrname{
+            color:#092163;
+            font-family: "Pixelify Sans";
+            position:absolute;
+            left:5%;
+            width:40%;
+            top:52%;
+            font-size:18px;
+            text-align: center;
+        }
+
+        .instrtitle{
+            color:#092163;
+            font-family: "Pixelify Sans";
+            margin-left:2%;
+            margin-top:30px;
+            font-size:32px;
+        }
+
+        #coords{
+            top:56% !important;
+        }
+
+        .butts {
+        }
+
+        .butts *{
+            height:50px;
+            width:100px;
+            font-family: "Pixelify Sans";
+            background-color:transparent;
+            cursor:pointer;
+            font-size:18px;
+
+            position: absolute;
+            top:26vh;
+            margin-left:10px;left:10px;
+
+        }
+
+        .butts *:active{
+            transform:translatey(5px);
+        }
+
+
+        #obo{
+
+        }
+
+        #bc{
+            top:24.4vh;
+        }
+
+        #next{
+            top:53vh;
+            height:50px;
+            width:100px;
+            font-weight: bold;
+            font-family: "Pixelify Sans";
+            background-color:transparent;
+            cursor:pointer;
+            font-size:32px;
+            border:none;
+
+            position:absolute;
+            left:25%;
+            transform:translateX(-50%);
+
+        }
+
+        #next:active{
+            transform:translateY(7px) translateX(-50%);;
+        }
+      
+
+.pixel-cons,
+.pixel-cons--wrapper {
+  clip-path: polygon(0px calc(100% - 12px),
+    3px calc(100% - 12px),
+    3px calc(100% - 6px),
+    6px calc(100% - 6px),
+    6px calc(100% - 3px),
+    12px calc(100% - 3px),
+    12px 100%,
+    calc(100% - 12px) 100%,
+    calc(100% - 12px) calc(100% - 3px),
+    calc(100% - 6px) calc(100% - 3px),
+    calc(100% - 6px) calc(100% - 6px),
+    calc(100% - 3px) calc(100% - 6px),
+    calc(100% - 3px) calc(100% - 12px),
+    100% calc(100% - 12px),
+    100% 12px,
+    calc(100% - 3px) 12px,
+    calc(100% - 3px) 6px,
+    calc(100% - 6px) 6px,
+    calc(100% - 6px) 3px,
+    calc(100% - 12px) 3px,
+    calc(100% - 12px) 0px,
+    12px 0px,
+    12px 3px,
+    6px 3px,
+    6px 6px,
+    3px 6px,
+    3px 12px,
+    0px 12px);
+  position: relative;
+}
+.pixel-cons {
+  border: 3px solid transparent;
+}
+.pixel-cons--wrapper {
+  width: fit-content;
+  height: fit-content;
+}
+.pixel-cons--wrapper .pixel-cons {
+  display: block;
+  clip-path: polygon(3px 12px,
+    6px 12px,
+    6px 6px,
+    12px 6px,
+    12px 3px,
+    calc(100% - 12px) 3px,
+    calc(100% - 12px) 6px,
+    calc(100% - 6px) 6px,
+    calc(100% - 6px) 12px,
+    calc(100% - 3px) 12px,
+    calc(100% - 3px) calc(100% - 12px),
+    calc(100% - 6px) calc(100% - 12px),
+    calc(100% - 6px) calc(100% - 6px),
+    calc(100% - 12px) calc(100% - 6px),
+    calc(100% - 12px) calc(100% - 3px),
+    12px calc(100% - 3px),
+    12px calc(100% - 6px),
+    6px calc(100% - 6px),
+    6px calc(100% - 12px),
+    3px calc(100% - 12px));
+}
+.pixel-cons::after,
+.pixel-cons--wrapper::after {
+  content: "";
+  position: absolute;
+  clip-path: polygon(0px calc(100% - 12px),
+    3px calc(100% - 12px),
+    3px calc(100% - 6px),
+    6px calc(100% - 6px),
+    6px calc(100% - 3px),
+    12px calc(100% - 3px),
+    12px 100%,
+    calc(100% - 12px) 100%,
+    calc(100% - 12px) calc(100% - 3px),
+    calc(100% - 6px) calc(100% - 3px),
+    calc(100% - 6px) calc(100% - 6px),
+    calc(100% - 3px) calc(100% - 6px),
+    calc(100% - 3px) calc(100% - 12px),
+    100% calc(100% - 12px),
+    100% 12px,
+    calc(100% - 3px) 12px,
+    calc(100% - 3px) 6px,
+    calc(100% - 6px) 6px,
+    calc(100% - 6px) 3px,
+    calc(100% - 12px) 3px,
+    calc(100% - 12px) 0px,
+    12px 0px,
+    12px 3px,
+    6px 3px,
+    6px 6px,
+    3px 6px,
+    3px 12px,
+    0px 12px,
+    0px 50%,
+    3px 50%,
+    3px 12px,
+    6px 12px,
+    6px 6px,
+    12px 6px,
+    12px 3px,
+    calc(100% - 12px) 3px,
+    calc(100% - 12px) 6px,
+    calc(100% - 6px) 6px,
+    calc(100% - 6px) 12px,
+    calc(100% - 3px) 12px,
+    calc(100% - 3px) calc(100% - 12px),
+    calc(100% - 6px) calc(100% - 12px),
+    calc(100% - 6px) calc(100% - 6px),
+    calc(100% - 12px) calc(100% - 6px),
+    calc(100% - 12px) calc(100% - 3px),
+    12px calc(100% - 3px),
+    12px calc(100% - 6px),
+    6px calc(100% - 6px),
+    6px calc(100% - 12px),
+    3px calc(100% - 12px),
+    3px 50%,
+    0px 50%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #092163;
+  display: block;
+  pointer-events: none;
+}
+.pixel-cons::after {
+  margin: -3px;
+}
+
+/**/
+.pixel-corners,
+.pixel-corners--wrapper {
+  clip-path: polygon(0px calc(100% - 40px),
+    4px calc(100% - 40px),
+    4px calc(100% - 32px),
+    8px calc(100% - 32px),
+    8px calc(100% - 24px),
+    12px calc(100% - 24px),
+    12px calc(100% - 20px),
+    16px calc(100% - 20px),
+    16px calc(100% - 16px),
+    20px calc(100% - 16px),
+    20px calc(100% - 12px),
+    24px calc(100% - 12px),
+    24px calc(100% - 8px),
+    32px calc(100% - 8px),
+    32px calc(100% - 4px),
+    40px calc(100% - 4px),
+    40px 100%,
+    calc(100% - 40px) 100%,
+    calc(100% - 40px) calc(100% - 4px),
+    calc(100% - 32px) calc(100% - 4px),
+    calc(100% - 32px) calc(100% - 8px),
+    calc(100% - 24px) calc(100% - 8px),
+    calc(100% - 24px) calc(100% - 12px),
+    calc(100% - 20px) calc(100% - 12px),
+    calc(100% - 20px) calc(100% - 16px),
+    calc(100% - 16px) calc(100% - 16px),
+    calc(100% - 16px) calc(100% - 20px),
+    calc(100% - 12px) calc(100% - 20px),
+    calc(100% - 12px) calc(100% - 24px),
+    calc(100% - 8px) calc(100% - 24px),
+    calc(100% - 8px) calc(100% - 32px),
+    calc(100% - 4px) calc(100% - 32px),
+    calc(100% - 4px) calc(100% - 40px),
+    100% calc(100% - 40px),
+    100% 40px,
+    calc(100% - 4px) 40px,
+    calc(100% - 4px) 32px,
+    calc(100% - 8px) 32px,
+    calc(100% - 8px) 24px,
+    calc(100% - 12px) 24px,
+    calc(100% - 12px) 20px,
+    calc(100% - 16px) 20px,
+    calc(100% - 16px) 16px,
+    calc(100% - 20px) 16px,
+    calc(100% - 20px) 12px,
+    calc(100% - 24px) 12px,
+    calc(100% - 24px) 8px,
+    calc(100% - 32px) 8px,
+    calc(100% - 32px) 4px,
+    calc(100% - 40px) 4px,
+    calc(100% - 40px) 0px,
+    40px 0px,
+    40px 4px,
+    32px 4px,
+    32px 8px,
+    24px 8px,
+    24px 12px,
+    20px 12px,
+    20px 16px,
+    16px 16px,
+    16px 20px,
+    12px 20px,
+    12px 24px,
+    8px 24px,
+    8px 32px,
+    4px 32px,
+    4px 40px,
+    0px 40px);
+  position: relative;
+}
+.pixel-corners {
+  border: 4px solid transparent;
+}
+.pixel-corners--wrapper {
+  width: fit-content;
+  height: fit-content;
+}
+.pixel-corners--wrapper .pixel-corners {
+  display: block;
+  clip-path: polygon(4px 40px,
+    8px 40px,
+    8px 32px,
+    12px 32px,
+    12px 24px,
+    16px 24px,
+    16px 20px,
+    20px 20px,
+    20px 16px,
+    24px 16px,
+    24px 12px,
+    32px 12px,
+    32px 8px,
+    40px 8px,
+    40px 4px,
+    calc(100% - 40px) 4px,
+    calc(100% - 40px) 8px,
+    calc(100% - 32px) 8px,
+    calc(100% - 32px) 12px,
+    calc(100% - 24px) 12px,
+    calc(100% - 24px) 16px,
+    calc(100% - 20px) 16px,
+    calc(100% - 20px) 20px,
+    calc(100% - 16px) 20px,
+    calc(100% - 16px) 24px,
+    calc(100% - 12px) 24px,
+    calc(100% - 12px) 32px,
+    calc(100% - 8px) 32px,
+    calc(100% - 8px) 40px,
+    calc(100% - 4px) 40px,
+    calc(100% - 4px) calc(100% - 40px),
+    calc(100% - 8px) calc(100% - 40px),
+    calc(100% - 8px) calc(100% - 32px),
+    calc(100% - 12px) calc(100% - 32px),
+    calc(100% - 12px) calc(100% - 24px),
+    calc(100% - 16px) calc(100% - 24px),
+    calc(100% - 16px) calc(100% - 20px),
+    calc(100% - 20px) calc(100% - 20px),
+    calc(100% - 20px) calc(100% - 16px),
+    calc(100% - 24px) calc(100% - 16px),
+    calc(100% - 24px) calc(100% - 12px),
+    calc(100% - 32px) calc(100% - 12px),
+    calc(100% - 32px) calc(100% - 8px),
+    calc(100% - 40px) calc(100% - 8px),
+    calc(100% - 40px) calc(100% - 4px),
+    40px calc(100% - 4px),
+    40px calc(100% - 8px),
+    32px calc(100% - 8px),
+    32px calc(100% - 12px),
+    24px calc(100% - 12px),
+    24px calc(100% - 16px),
+    20px calc(100% - 16px),
+    20px calc(100% - 20px),
+    16px calc(100% - 20px),
+    16px calc(100% - 24px),
+    12px calc(100% - 24px),
+    12px calc(100% - 32px),
+    8px calc(100% - 32px),
+    8px calc(100% - 40px),
+    4px calc(100% - 40px));
+}
+.pixel-corners::after,
+.pixel-corners--wrapper::after {
+  content: "";
+  position: absolute;
+  clip-path: polygon(0px calc(100% - 40px),
+    4px calc(100% - 40px),
+    4px calc(100% - 32px),
+    8px calc(100% - 32px),
+    8px calc(100% - 24px),
+    12px calc(100% - 24px),
+    12px calc(100% - 20px),
+    16px calc(100% - 20px),
+    16px calc(100% - 16px),
+    20px calc(100% - 16px),
+    20px calc(100% - 12px),
+    24px calc(100% - 12px),
+    24px calc(100% - 8px),
+    32px calc(100% - 8px),
+    32px calc(100% - 4px),
+    40px calc(100% - 4px),
+    40px 100%,
+    calc(100% - 40px) 100%,
+    calc(100% - 40px) calc(100% - 4px),
+    calc(100% - 32px) calc(100% - 4px),
+    calc(100% - 32px) calc(100% - 8px),
+    calc(100% - 24px) calc(100% - 8px),
+    calc(100% - 24px) calc(100% - 12px),
+    calc(100% - 20px) calc(100% - 12px),
+    calc(100% - 20px) calc(100% - 16px),
+    calc(100% - 16px) calc(100% - 16px),
+    calc(100% - 16px) calc(100% - 20px),
+    calc(100% - 12px) calc(100% - 20px),
+    calc(100% - 12px) calc(100% - 24px),
+    calc(100% - 8px) calc(100% - 24px),
+    calc(100% - 8px) calc(100% - 32px),
+    calc(100% - 4px) calc(100% - 32px),
+    calc(100% - 4px) calc(100% - 40px),
+    100% calc(100% - 40px),
+    100% 40px,
+    calc(100% - 4px) 40px,
+    calc(100% - 4px) 32px,
+    calc(100% - 8px) 32px,
+    calc(100% - 8px) 24px,
+    calc(100% - 12px) 24px,
+    calc(100% - 12px) 20px,
+    calc(100% - 16px) 20px,
+    calc(100% - 16px) 16px,
+    calc(100% - 20px) 16px,
+    calc(100% - 20px) 12px,
+    calc(100% - 24px) 12px,
+    calc(100% - 24px) 8px,
+    calc(100% - 32px) 8px,
+    calc(100% - 32px) 4px,
+    calc(100% - 40px) 4px,
+    calc(100% - 40px) 0px,
+    40px 0px,
+    40px 4px,
+    32px 4px,
+    32px 8px,
+    24px 8px,
+    24px 12px,
+    20px 12px,
+    20px 16px,
+    16px 16px,
+    16px 20px,
+    12px 20px,
+    12px 24px,
+    8px 24px,
+    8px 32px,
+    4px 32px,
+    4px 40px,
+    0px 40px,
+    0px 50%,
+    4px 50%,
+    4px 40px,
+    8px 40px,
+    8px 32px,
+    12px 32px,
+    12px 24px,
+    16px 24px,
+    16px 20px,
+    20px 20px,
+    20px 16px,
+    24px 16px,
+    24px 12px,
+    32px 12px,
+    32px 8px,
+    40px 8px,
+    40px 4px,
+    calc(100% - 40px) 4px,
+    calc(100% - 40px) 8px,
+    calc(100% - 32px) 8px,
+    calc(100% - 32px) 12px,
+    calc(100% - 24px) 12px,
+    calc(100% - 24px) 16px,
+    calc(100% - 20px) 16px,
+    calc(100% - 20px) 20px,
+    calc(100% - 16px) 20px,
+    calc(100% - 16px) 24px,
+    calc(100% - 12px) 24px,
+    calc(100% - 12px) 32px,
+    calc(100% - 8px) 32px,
+    calc(100% - 8px) 40px,
+    calc(100% - 4px) 40px,
+    calc(100% - 4px) calc(100% - 40px),
+    calc(100% - 8px) calc(100% - 40px),
+    calc(100% - 8px) calc(100% - 32px),
+    calc(100% - 12px) calc(100% - 32px),
+    calc(100% - 12px) calc(100% - 24px),
+    calc(100% - 16px) calc(100% - 24px),
+    calc(100% - 16px) calc(100% - 20px),
+    calc(100% - 20px) calc(100% - 20px),
+    calc(100% - 20px) calc(100% - 16px),
+    calc(100% - 24px) calc(100% - 16px),
+    calc(100% - 24px) calc(100% - 12px),
+    calc(100% - 32px) calc(100% - 12px),
+    calc(100% - 32px) calc(100% - 8px),
+    calc(100% - 40px) calc(100% - 8px),
+    calc(100% - 40px) calc(100% - 4px),
+    40px calc(100% - 4px),
+    40px calc(100% - 8px),
+    32px calc(100% - 8px),
+    32px calc(100% - 12px),
+    24px calc(100% - 12px),
+    24px calc(100% - 16px),
+    20px calc(100% - 16px),
+    20px calc(100% - 20px),
+    16px calc(100% - 20px),
+    16px calc(100% - 24px),
+    12px calc(100% - 24px),
+    12px calc(100% - 32px),
+    8px calc(100% - 32px),
+    8px calc(100% - 40px),
+    4px calc(100% - 40px),
+    4px 50%,
+    0px 50%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #e6c405;
+  display: block;
+  pointer-events: none;
+}
+.pixel-corners::after {
+  margin: -4px;
+}
+
 
         input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -608,10 +1181,11 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
-}
-        
+}   
+
 
     </style>
+    }
 
 </head>
 <body> 
@@ -673,6 +1247,32 @@ input[type=number] {
         <img src="delete.png" id="del" onclick="delete()">
         <input id="edit" class="palette" type="color">
     </div> 
+
+
+
+    <div id="instructionsmodal" class="instrbkg">
+
+        <div id="instrholder" class="instrholder pixel-corners">
+
+            <div class="instrtitlediv">
+            <h1 class="instrtitle">Pixels by color</h1>
+
+            <div id="butts" class="butts">
+                <button id="obo" class="pixel-cons" onclick="onebyone()">one by one</button>
+                <button id="bc" class="pixel-cons" onclick="bycolor()">by color</button>
+            </div>
+            <button id="next" style="display:none" id="next">></button>
+
+            <canvas id="instrCanvas"></canvas>
+
+            <p class="instrname" style="display:none;" id="instrname">placeholder</p>
+            <div id="instrsqr" style="display: none;"></div>
+            <p id="coords" class="instrname"></p>
+
+        </div>
+
+    </div>
+
     <script>
 
         let colors = JSON.parse(localStorage.getItem('saves'));
@@ -710,6 +1310,33 @@ input[type=number] {
         let hei = document.getElementById("desiredHeight");
         wid.value="W";
 
+        let instructionsmodal = document.getElementById("instructionsmodal");
+
+
+        let instrcanvas = document.getElementById("instrCanvas");
+        let instrctx = instrCanvas.getContext('2d');
+
+        let result=[];
+
+        let dimensions=[];
+
+        let next=document.getElementById("next");
+
+        let pixelindex=0;
+
+        let bycolorlist=[];
+
+        let bycolorx=0;
+        let bycolory=0;
+        let lastbycolorx=0;
+        let lastbycolory=0;
+
+
+
+
+
+
+
 
 
         let file;
@@ -717,7 +1344,10 @@ input[type=number] {
 
         renderColorList();
 
+        closecolormenu();
+        closecolorprofile();
 
+        instructionsInit();
 
 
 
@@ -808,6 +1438,7 @@ input[type=number] {
             reader.readAsDataURL(file);
 
             openModal();
+            originalCanvas.style.display="block";
 
             event.target.value="";
             
@@ -992,6 +1623,8 @@ input[type=number] {
 
         function pixelateImage() {
 
+            result=[]
+
             closecolormenu();
             closecolorprofile();
 
@@ -1014,16 +1647,20 @@ input[type=number] {
             const newWidth = Math.floor(img.width / scaleFactor);
             const newHeight = Math.floor(img.height / scaleFactor);
 
+            dimensions=[newWidth,newHeight];
+
             const imageData = originalCtx.getImageData(0, 0, img.width, img.height);
             const pixels = imageData.data;
 
             compressedCanvas = document.getElementById('compressedCanvas');
             compressedCtx = compressedCanvas.getContext('2d');
-            compressedCanvas.width = img.width;
-            compressedCanvas.height = img.height;
+            compressedCanvas.width = img.width/scaleFactor;
+            compressedCanvas.height = img.height/scaleFactor;
+            let x;
+            let y;
 
-            for (let y = 0; y < newHeight; y++) {
-                for (let x = 0; x < newWidth; x++) {
+            for (y = 0; y < newHeight; y++) {
+                for (x = 0; x < newWidth; x++) {
                     let r = 0, g = 0, b = 0, a = 0;
                     let count = 0;
 
@@ -1047,27 +1684,226 @@ input[type=number] {
                     b = b / count;
                     a = a / count;
 
+                    let tcolor;
+
                     // Find the closest color
                     if (colors.length==0 | usecols==false){
                         compressedCtx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
-                        compressedCtx.fillRect(x * scaleFactor, y * scaleFactor, Math.ceil(scaleFactor), Math.ceil(scaleFactor));
+                        compressedCtx.fillRect(x, y, 1, 1);
+                        tcolor=rgbToHex(r,g,b);
+
                     } else {
                         const closestColor = findClosestColor(r, g, b);
                         // Draw the closest color
                         compressedCtx.fillStyle = closestColor;
-                        compressedCtx.fillRect(x * scaleFactor, y * scaleFactor, Math.ceil(scaleFactor), Math.ceil(scaleFactor));
+                        compressedCtx.fillRect(x , y , 1, 1);
+                        tcolor=closestColor;
+                    }
+
+                    result.push(tcolor);
+                }
+            }
+            //trim (x*scalefactor+scalefactor, y*scalefactor+scalefactor);
+            originalCanvas.style.display="none";
+            compressedCanvas.style.display="initial";
+            compressedCanvas.onclick=function(){instructionsInit()};
+        }
+
+        function rgbToHex(r, g, b) {
+          return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+        }
+
+        
+
+        function cubicBezier(t, p0=1, p1=0, p2=0, p3=1) {
+            const t1 = 1 - t;
+            return t1 ** 3 * p0 + 3 * t1 ** 2 * t * p1 + 3 * t1 * t ** 2 * p2 + t ** 3 * p3;
+        }
+
+
+
+
+        
+
+        function instructionsInit(){
+            pixelindex=0;
+            instructionsmodal.classList.add("comefromtop");
+            console.log(result);
+
+            /*DELETE THISE*/
+            result=['#ffffff'];
+            dimensions=[1,1];
+
+            console.log(dimensions);
+            
+
+            instrcanvas.width=dimensions[0];
+            instrcanvas.height=dimensions[1];
+
+            let pixelcount = result.length;
+
+
+            let totalDuration = 2500;
+
+            let numberOfCalls = pixelcount;
+
+            //numberOfCalls+=1600;
+
+
+
+            let delays=[]
+            
+            for (let i = 0; i < numberOfCalls; i++) {
+                //normalise input t
+              const t = i / (numberOfCalls);
+              const delay = (cubicBezier(t)**5 * totalDuration);
+
+              setTimeout(function(){paintnext(i,false)}, 1000+delay);
+            }
+
+
+
+
+
+        }
+
+        function finish(){
+            alert("done!");
+        }
+
+        function onebyone(){
+            next.onclick=function(){onebyonenext()};
+            trans();
+        }
+
+        function bycolor(){
+            bycolorlist=[]
+
+            let z=0;
+            //console.log(result)
+            for (let p=0; p<result.length; p++){
+                let found=false;
+
+                for (let c=0; c< bycolorlist.length; c++){
+                    //console.log(result[bycolorlist[c][0]], result[p]);
+                    if (result[bycolorlist[c][0]] == result[p]){
+                        bycolorlist[c].push(z);
+                        found=true;
+                    }
+                }
+
+                if (!found){
+                    bycolorlist.push([z]);
+                }
+
+
+                z++;
+            }
+
+
+
+
+
+            next.onclick=function(){bycolornext()};
+            trans();
+        }
+
+        function trans(){
+            document.getElementById("instrsqr").style.display="block";
+            document.getElementById("instrname").style.display="block";
+            document.getElementById("butts").classList.add("out");
+            let next=document.getElementById("next");
+           
+            setTimeout(function(){
+                 next.style.display="block";
+                next.classList.add("in");
+            }, 250);
+            
+        }
+
+        function bycolornext(){
+
+            console.log(lastbycolorx,lastbycolory);
+            paintnext(bycolorlist[lastbycolorx][lastbycolory],false);
+            paintnext(bycolorlist[bycolorx][bycolory],true);
+
+            lastbycolory=bycolory;
+            lastbycolorx=bycolorx;
+
+            instruct(bycolorlist[bycolorx][bycolory]);
+
+
+            bycolory++;
+
+            
+            if (bycolory >= bycolorlist[bycolorx].length){
+                bycolory=0;
+                bycolorx++;
+
+                if (bycolorx >= bycolorlist.length){
+                    finish();
+                }
+            }
+
+
+        }
+
+        function onebyonenext(){
+            if (pixelindex>=result.length){
+                finish();
+            }
+
+            paintnext(pixelindex,true);
+            paintnext(pixelindex-1,false);
+
+            instruct(pixelindex);
+            pixelindex++;
+        }
+
+        function instruct(pixelindex){
+            if (usecols){
+                for (let x=0; x<colors.length; x++){
+                    if (result[pixelindex] == colors[x]){
+                        name=x;
+                        let instrname= document.getElementById('instrname');
+                        instrname.textContent=names[name]
+                        break;
                     }
                 }
             }
 
-        compressedCanvas.style.display="initial";
-        instructionsInit();
+            
+            let instrsqr= document.getElementById('instrsqr');
+            let coords= document.getElementById('coords');
 
+            coords.textContent=`(${pixelindex%instrcanvas.width}, ${Math.floor(pixelindex/instrcanvas.width)})`;
+
+            instrsqr.style.backgroundColor=result[pixelindex];
+
+
+            //alert(result[pixelindex])
         }
 
-        function instructionsInit(){
-            compressedCanvas;
-            //darken and turn pointer then show onclick n stuff
+        function paintnext(i,brightened){
+            if (i<0){return;}
+            let x = i%instrcanvas.width;
+            let y = Math.floor(i/instrcanvas.width);
+            //console.log(x,y)
+
+            instrctx.fillStyle=result[i];
+            if (brightened) {
+                let rgb = hexToRgb(result[i]);
+                let newcol;
+                if ((rgb.r+rgb.g+rgb.b)/3 > 130){
+                    newcol = `rgb(${rgb.r-75}, ${rgb.g-75}, ${rgb.b-75})`
+                } else {
+                    newcol = `rgb(${rgb.r+100}, ${rgb.g+100}, ${rgb.b+100})`
+                }
+
+                instrctx.fillStyle=newcol;
+
+            }
+            instrctx.fillRect(x , y , 1, 1);
         }
 
         function stopInstructions(){
