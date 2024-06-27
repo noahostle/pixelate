@@ -642,6 +642,19 @@
             }
         }
 
+                .fukgobak{
+            animation: upme 1s cubic-bezier(1,0,0,1) forwards;
+        }
+
+        @keyframes upme{
+            0%{
+                top:0%;
+            }
+            100%{
+                top:-100%;
+            }
+        }
+
         .instrholder{
             position:absolute;
             min-height:80vh;
@@ -749,6 +762,15 @@
             transform:translateY(7px) translateX(-50%);;
         }
       
+
+      @keyframes fina
+        {          0%{transform: translateX(-50%) rotate(0deg);}
+            100%{transform: translateX(-50%) rotate(900deg);}
+        }
+
+        .kms{
+            animation: fina 1.5s cubic-bezier(.89,-0.23,.13,1.26) forwards;
+        }
 
 .pixel-cons,
 .pixel-cons--wrapper {
@@ -1265,7 +1287,7 @@ input[type=number] {
 
             <canvas id="instrCanvas"></canvas>
 
-            <p class="instrname" style="display:none;" id="instrname">placeholder</p>
+            <p class="instrname" style="display:none;" id="instrname"></p>
             <div id="instrsqr" style="display: none;"></div>
             <p id="coords" class="instrname"></p>
 
@@ -1331,6 +1353,8 @@ input[type=number] {
         let lastbycolorx=0;
         let lastbycolory=0;
 
+        let bycolflag;
+
 
 
 
@@ -1347,7 +1371,7 @@ input[type=number] {
         closecolormenu();
         closecolorprofile();
 
-        instructionsInit();
+        //instructionsInit();
 
 
 
@@ -1731,8 +1755,6 @@ input[type=number] {
             console.log(result);
 
             /*DELETE THISE*/
-            result=['#ffffff'];
-            dimensions=[1,1];
 
             console.log(dimensions);
             
@@ -1768,15 +1790,18 @@ input[type=number] {
         }
 
         function finish(){
-            alert("done!");
+            next.classList.add("kms");
+            next.onclick=function(){stopInstructions();};
         }
 
         function onebyone(){
+            bycolflag=false;
             next.onclick=function(){onebyonenext()};
             trans();
         }
 
         function bycolor(){
+            bycolflag=true;
             bycolorlist=[]
 
             let z=0;
@@ -1813,6 +1838,15 @@ input[type=number] {
             document.getElementById("instrname").style.display="block";
             document.getElementById("butts").classList.add("out");
             let next=document.getElementById("next");
+
+            if (bycolflag){
+                bycolornext()
+               
+           } else{
+                onebyonenext(); 
+           }
+
+
            
             setTimeout(function(){
                  next.style.display="block";
@@ -1851,6 +1885,7 @@ input[type=number] {
         function onebyonenext(){
             if (pixelindex>=result.length){
                 finish();
+                return
             }
 
             paintnext(pixelindex,true);
@@ -1876,7 +1911,7 @@ input[type=number] {
             let instrsqr= document.getElementById('instrsqr');
             let coords= document.getElementById('coords');
 
-            coords.textContent=`(${pixelindex%instrcanvas.width}, ${Math.floor(pixelindex/instrcanvas.width)})`;
+            coords.textContent=`(${(pixelindex%instrcanvas.width)+1}, ${Math.floor(pixelindex/instrcanvas.width)+1})`;
 
             instrsqr.style.backgroundColor=result[pixelindex];
 
@@ -1907,6 +1942,10 @@ input[type=number] {
         }
 
         function stopInstructions(){
+            instructionsmodal.classList.remove("comefromtop");
+            instructionsmodal.classList.add("fukgobak");
+            closemodal();
+            setTimeout(function(){location.reload()}, 1000);
             
         }
 
