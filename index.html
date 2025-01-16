@@ -1211,6 +1211,7 @@ input[type=number] {
 
 </head>
 <body> 
+    <Button id="downloadBtn">Download! (fix later)</Button>
 
     <div id="darken" style="display:none;" onclick="closemodal()"></div>
     <div id="menu">
@@ -1731,6 +1732,19 @@ input[type=number] {
             originalCanvas.style.display="none";
             compressedCanvas.style.display="initial";
             compressedCanvas.onclick=function(){instructionsInit()};
+                 // Handle download button click
+            document.getElementById('downloadBtn').addEventListener('click', () => {
+            // Convert canvas to a data URL
+            const imageURL = canvas.toDataURL('image/png');
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.download = 'canvas-image.png'; // Name of the downloaded file
+            
+            // Trigger the download
+            link.click();
+        });
         }
 
         function rgbToHex(r, g, b) {
