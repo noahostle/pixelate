@@ -1679,6 +1679,7 @@ input[type=number] {
 
             compressedCanvas = document.getElementById('compressedCanvas');
             compressedCtx = compressedCanvas.getContext('2d');
+            compressedCtx.imageSmoothingEnabled = false;
             compressedCanvas.width = img.width/scaleFactor;
             compressedCanvas.height = img.height/scaleFactor;
             let x;
