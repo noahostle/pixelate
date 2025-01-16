@@ -1735,7 +1735,7 @@ input[type=number] {
                  // Handle download button click
             document.getElementById('downloadBtn').addEventListener('click', () => {
             // Convert canvas to a data URL
-            const imageURL = canvas.toDataURL('image/png');
+            const imageURL = compressedCanvas.toDataURL('image/png');
             
             // Create a temporary link element
             const link = document.createElement('a');
